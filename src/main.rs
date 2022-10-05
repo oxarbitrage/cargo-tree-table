@@ -41,7 +41,10 @@ fn main() {
                 println!();
             }
 
-            println!("## {} {}", pieces.next().unwrap(), pieces.next().unwrap());
+            let name = pieces.next().expect("name should be available");
+            let version = pieces.next().expect("version should be available");
+
+            println!("## {} {}", name, version);
             println!();
             println!();
             println!("| Name | Version");
