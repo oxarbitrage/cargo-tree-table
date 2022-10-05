@@ -1,10 +1,17 @@
-use std::process::Command;
+use std::{env, process::Command};
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() != 2 {
+        println!("Usage: {} path-to-manifest", args[0]);
+        return;
+    }
+
     let command_output = Command::new("cargo")
         .arg("tree")
         .arg("--manifest-path")
-        .arg("/home/oxarbitrage/zebra/issue5214/zebra/Cargo.toml")
+        .arg(args[1].clone())
         .arg("--depth")
         .arg("1")
         .arg("--prefix")
