@@ -8,7 +8,9 @@ fn main() {
         return;
     }
 
-    let command_output = Command::new("cargo")
+    let mut program = Command::new("cargo");
+
+    let command = program
         .arg("tree")
         .arg("--manifest-path")
         .arg(args[1].clone())
@@ -28,6 +30,9 @@ fn main() {
         .arg("{p} {r}")
         .arg("--features")
         .arg("sentry,journald,filter-reload,prometheus")
+        .arg("--no-dedupe");
+
+    let command_output = command
         .output()
         .expect("failed to execute process");
 
