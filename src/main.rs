@@ -4,8 +4,11 @@ use std::{env, process::Command};
 async fn main() -> Result<(), reqwest::Error> {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() != 2 {
-        println!("Usage: {} path-to-manifest", args[0]);
+    if args.len() < 2 {
+        println!(
+            "Usage: {} path-to-manifest zebra-specific-flag(any char)",
+            args[0]
+        );
         return Ok(());
     }
 
@@ -23,15 +26,19 @@ async fn main() -> Result<(), reqwest::Error> {
         .arg("--edges")
         .arg("normal")
         .arg("--workspace")
-        .arg("--exclude")
-        .arg("zebra-client")
-        .arg("--exclude")
-        .arg("zebra-test")
         .arg("--format")
         .arg("{p} {r}")
-        .arg("--features")
-        .arg("sentry,journald,filter-reload,prometheus")
         .arg("--no-dedupe");
+
+    if args.len() > 2 {
+        command
+            .arg("--exclude")
+            .arg("zebra-client")
+            .arg("--exclude")
+            .arg("zebra-test")
+            .arg("--features")
+            .arg("sentry,journald,filter-reload,prometheus");
+    }
 
     let command_output = command.output().expect("failed to execute process");
 
